@@ -75,7 +75,6 @@
             margin-bottom: 15px;
         }
 
-        /* إصلاح إطار الصور */
         .book-container {
             position: relative;
             width: 100%;
@@ -90,7 +89,7 @@
         }
 
         .main-slide {
-            display: none; /* يتم التحكم بها عبر الجافاسكريبت */
+            display: none;
             width: 100%;
             height: 100%;
             position: relative;
@@ -452,6 +451,16 @@
                         <input type="text" id="baladia" required placeholder="اسم البلدية أو الحي...">
                     </div>
 
+                    <!-- مكان التوصيل الجديد -->
+                    <div class="form-group">
+                        <label for="delivery_place">مكان التوصيل:</label>
+                        <select id="delivery_place" required>
+                            <option value="" disabled selected>-- اختر مكان التوصيل --</option>
+                            <option value="المنزل">🏠 التوصيل للمنزل</option>
+                            <option value="المكتب / مقر العمل">🏢 التوصيل للمكتب / مقر العمل</option>
+                        </select>
+                    </div>
+
                     <div class="form-group" style="text-align: center;">
                         <label>عدد الكتب المطلوبة:</label>
                         <div class="quantity-control">
@@ -469,7 +478,8 @@
         <div id="success-message">
             <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
             <h1 class="success-title-ar">شكراً على طلبكم! سيتم الاتصال بكم قريباً لتأكيد طلبكم وشحنه.</h1>
-            <a href="https://dz-fast-shop.github.io/DZ-Stor/" class="btn-back">⬅️ العودة إلى المتجر الرئيسي</a>
+            <!-- رابط العودة المصلح ليقعد في نفس المتجر الحالي الخاص بكتاب التلوين -->
+            <a href="https://dz-fast-shop.github.io/DZ-Stor/girl-moments/" class="btn-back">⬅️ العودة إلى المتجر</a>
         </div>
 
     </div>
@@ -479,7 +489,6 @@
         let slideIndex = 0;
         let slideTimeout;
         
-        // تشغيل السلايدر بعد تحميل الصفحة بالكامل لضمان عدم حدوث أخطاء بصورية
         window.addEventListener('DOMContentLoaded', () => {
             showSlides();
         });
@@ -508,7 +517,7 @@
             slideTimeout = setTimeout(showSlides, 5000);
         }
 
-        // تحكم في الكمية بشكل مستقل آمن
+        // تحكم في الكمية
         let currentQuantity = 1;
         function changeQuantity(amount) {
             currentQuantity += amount;
@@ -520,7 +529,7 @@
         function handleOrderSubmit(event) {
             event.preventDefault();
 
-            // إخفاء نموذج المتجر وإظهار صفحة الشكر فوراً وبدون أي تأخير بصري
+            // إخفاء نموذج المتجر وإظهار صفحة الشكر فوراً
             document.getElementById('store-content').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
             window.scrollTo(0, 0);
@@ -530,11 +539,11 @@
                 phone: document.getElementById('phone').value,
                 wilaya: document.getElementById('wilaya').value,
                 baladia: document.getElementById('baladia').value,
+                delivery_place: document.getElementById('delivery_place').value, // إرسال مكان التوصيل الجديد
                 quantity: currentQuantity,
                 product: "Girl Moments Coloring Book"
             };
 
-            // رابط الـ Webhook مصلح في سطر واحد تماماً
             const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec';
 
             // إرسال البيانات لقوقل شيت في الخلفية
@@ -550,3 +559,4 @@
     </script>
 </body>
 </html>
+
