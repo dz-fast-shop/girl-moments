@@ -75,6 +75,7 @@
             margin-bottom: 15px;
         }
 
+        /* إصلاح إطار الصور */
         .book-container {
             position: relative;
             width: 100%;
@@ -86,11 +87,10 @@
             border: 5px solid var(--dark-pink);
             background-color: #fff;
             margin-bottom: 15px;
-            perspective: 1000px;
         }
 
         .main-slide {
-            display: none;
+            display: none; /* يتم التحكم بها عبر الجافاسكريبت */
             width: 100%;
             height: 100%;
             position: relative;
@@ -114,6 +114,7 @@
             font-size: 1rem;
             font-weight: 700;
             text-align: center;
+            z-index: 10;
         }
 
         .thumbnail-gallery {
@@ -474,13 +475,18 @@
     </div>
 
     <script>
-        // سكربت السلايدر
+        // إعداد السلايدر
         let slideIndex = 0;
         let slideTimeout;
-        showSlides();
+        
+        // تشغيل السلايدر بعد تحميل الصفحة بالكامل لضمان عدم حدوث أخطاء بصورية
+        window.addEventListener('DOMContentLoaded', () => {
+            showSlides();
+        });
 
         function showSlides() {
             let slides = document.getElementsByClassName("main-slide");
+            if (slides.length === 0) return;
             for (let i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";  
             }
@@ -493,15 +499,16 @@
         function jumpToSlide(index) {
             clearTimeout(slideTimeout);
             let slides = document.getElementsByClassName("main-slide");
+            if (slides.length === 0) return;
             for (let i = 0; i < slides.length; i++) {
                 slides[i].style.display = "none";  
             }
             slideIndex = index + 1;
             slides[index].style.display = "block";
-            slideTimeout = setTimeout(showSlides, 5000); // يبقى 5 ثواني ثم يكمل الدوران تلقائياً
+            slideTimeout = setTimeout(showSlides, 5000);
         }
 
-        // تحكم في الكمية (الزايد والناقص)
+        // تحكم في الكمية بشكل مستقل آمن
         let currentQuantity = 1;
         function changeQuantity(amount) {
             currentQuantity += amount;
@@ -509,512 +516,14 @@
             document.getElementById('quantity-display').innerText = currentQuantity;
         }
 
-        // معالجة وإرسال الطلب
+        // إرسال الطلب وإظهار رسالة النجاح
         function handleOrderSubmit(event) {
             event.preventDefault();
 
-            const data = {
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                wilaya: document.getElementById('wilaya').value,
-                baladia: document.getElementById('baladia').value,
-                quantity: currentQuantity,
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* تخلي الصورة تبان كاملة بلا ما تتقطع وبلا ما تخرج على الإطار */
-            background-color: #fff; /* تعمر الفراغات الجانبية بالبيوضة باش تجي الخدمة نقية */
-        }
-
-        /* 3. ضبط معرض الصور المصغر (وحدة قدام أختها) */
-        .thumbnail-gallery {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto; /* يخليك تسحب بيدك يمين ويسار إذا ما كفاكش المكان */
-            padding: 10px 5px;
-            margin-bottom: 25px;
-            background: #fff;
-            border-radius: 12px;
-            border: 1px dashed var(--dark-pink);
-            /* إخفاء شريط التمرير المزعج باش يبقى المظهر أنيق */
-            scrollbar-width: none; 
-        }
-        .thumbnail-gallery::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* 4. إجبار الصور الصغيرة باش تلتزم بمربع صغير (75 بيكسل) وماتبانش عملاقة */
-        .thumb-box {
-            flex: 0 0 75px;
-            width: 75px;
-            height: 75px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 2px solid #eee;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .thumb-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* تقص الصورة الصغيرة على شكل مربع كامل باهي ومستف */
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-cozy);
-            background-image: radial-gradient(var(--primary-pink) 0.5px, transparent 0.5px), radial-gradient(var(--primary-pink) 0.5px, var(--bg-cozy) 0.5px);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
-            color: var(--text-color);
-            line-height: 1.6;
-            padding-bottom: 40px;
-        }
-
-        .announcement-bar {
-            background-color: var(--dark-pink);
-            color: white;
-            text-align: center;
-            padding: 8px 10px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .product-brand-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #222;
-            text-shadow: 2px 2px var(--primary-pink);
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
-
-        .product-sub {
-            font-size: 1.2rem;
-            color: var(--dark-green);
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        /* تنسيق الإطار الوردي الجديد للصور المتحركة بدلاً من المربع الأسود */
-        .slider-container {
-            position: relative;
-            width: 100%;
-            height: 350px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(255, 133, 162, 0.2);
-            border: 5px solid var(--dark-pink);
-            background-color: #fff;
-            margin-bottom: 25px;
-        }
-
-        .slide {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            background-color: #fff;
-        }
-
-        .slide-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 133, 162, 0.9);
-            color: white;
-            padding: 8px;
-            font-size: 1rem;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .price-tag {
-            background: linear-gradient(135deg, #fff, var(--pastel-green));
-            border: 2px dashed var(--dark-green);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .old-price {
-            text-decoration: line-through;
-            color: #999;
-            font-size: 1.1rem;
-            margin-left: 15px;
-        }
-
-        .new-price {
-            color: #d9381e;
-            font-size: 2.2rem;
-            font-weight: 900;
-        }
-
-        .save-badge {
-            background-color: var(--dark-pink);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            display: inline-block;
-            margin-top: 5px;
-            font-weight: 700;
-        }
-
-        .order-card {
-            background: white;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 2px solid var(--primary-pink);
-            margin-bottom: 30px;
-        }
-
-        .order-card h2 {
-            text-align: center;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s;
-            background-color: #fafafa;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--dark-pink);
-            background-color: #fff;
-            box-shadow: 0 0 8px rgba(255, 133, 162, 0.2);
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin: 10px 0 20px 0;
-            background: #fff5f7;
-            padding: 10px;
-            border-radius: 15px;
-            border: 1px dashed var(--dark-pink);
-        }
-
-        .quantity-btn {
-            background-color: var(--dark-pink);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 3px 8px rgba(255, 133, 162, 0.3);
-            user-select: none;
-        }
-
-        .quantity-value {
-            font-size: 1.5rem;
-            font-weight: 900;
-            min-width: 30px;
-            text-align: center;
-            color: #333;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, var(--dark-pink), #ff5c8a);
-            color: white;
-            border: none;
-            padding: 16px;
-            font-size: 1.3rem;
-            font-weight: 900;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(255, 133, 162, 0.4);
-            margin-top: 10px;
-        }
-
-        #success-message {
-            display: none;
-            text-align: center;
-            background: #fff;
-            border-radius: 25px;
-            padding: 40px 20px;
-            box-shadow: 0 15px 40px rgba(255, 133, 162, 0.3);
-            border: 4px solid #4caf50;
-        }
-
-        .success-title-ar {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #4caf50;
-            margin-bottom: 15px;
-        }
-
-        .btn-back {
-            display: inline-block;
-            background: #4a3f35;
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            font-weight: 700;
-            border-radius: 12px;
-            margin-top: 15px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="announcement-bar">
-        🎁 عرض خاص ومحدود: اطلب الآن والدفع عند الاستلام يد بيد!
-    </div>
-
-    <div class="container">
-        
-        <div id="store-content">
-            <header class="hero">
-                <div class="product-brand-title">Coloring Book</div>
-                <div class="product-sub">✨ النسخة الفاخرة بالنابض المميز ✨</div>
-                
-                <!-- الإطار المصلح الذي يعرض الصور المتحركة تلقائياً -->
-                <div class="book-container" id="mainBookContainer">
-                    <div class="main-slide">
-                        <img src="cover.jpg" alt="غلاف الكتاب">
-                        <div class="slide-caption">📖 غلاف ومظهر الكتاب الفاخر بالنابض</div>
-                    </div>
-                    <div class="main-slide">
-                        <img src="page1_blank.png" alt="رسمة 1 غير ملونة">
-                        <div class="slide-caption">✏️ النموذج الأول: رسمة جاهزة وممتعة للتلوين</div>
-                    </div>
-                    <div class="main-slide">
-                        <img src="page1_colored.png" alt="رسمة 1 ملونة">
-                        <div class="slide-caption">🎨 النتيجة المبهرة بعد التلوين</div>
-                    </div>
-                    <div class="main-slide">
-                        <img src="page2_blank.png" alt="رسمة 2 غير ملونة">
-                        <div class="slide-caption">✏️ النموذج الثاني: تفاصيل دقيقة لتنمية الإبداع</div>
-                    </div>
-                    <div class="main-slide">
-                        <img src="page2_colored.png" alt="رسمة 2 ملونة">
-                        <div class="slide-caption">🎨 سحر الألوان وتناسق التصاميم</div>
-                    </div>
-                    <div class="main-slide">
-                        <img src="page3_blank.png" alt="رسمة 3 غير ملونة">
-                        <div class="slide-caption">✏️ النموذج الثالث: رسومات متنوعة لكل الأذواق</div>
-                    </div>
-                    <div class="main-slide">
-                        <img src="page3_colored.png" alt="رسمة 3 ملونة">
-                        <div class="slide-caption">🎨 جودة الورق الفاخر تبرز جمال كل تلوين</div>
-                    </div>
-                </div>
-
-                <div class="thumbnail-gallery">
-                    <div class="thumb-box" onclick="jumpToSlide(0)"><img src="cover.jpg"></div>
-                    <div class="thumb-box" onclick="jumpToSlide(1)"><img src="page1_blank.png"></div>
-                    <div class="thumb-box" onclick="jumpToSlide(2)"><img src="page1_colored.png"></div>
-                    <div class="thumb-box" onclick="jumpToSlide(3)"><img src="page2_blank.png"></div>
-                    <div class="thumb-box" onclick="jumpToSlide(4)"><img src="page2_colored.png"></div>
-                    <div class="thumb-box" onclick="jumpToSlide(5)"><img src="page3_blank.png"></div>
-                    <div class="thumb-box" onclick="jumpToSlide(6)"><img src="page3_colored.png"></div>
-                </div>
-
-                </div>
-            </header>
-
-            <!-- ضبط السعر الدقيق المتوافق مع الصورة -->
-            <div class="price-tag">
-                <span class="old-price">750 دج</span>
-                <span class="new-price">450 دج</span> <br>
-                <span class="save-badge">🔥 سعر المصنع مباشرة (وفر 300 دج)</span>
-            </div>
-
-            <section class="order-card">
-                <h2>🛍️ املأ معلوماتك بدقة لإتمام الطلب:</h2>
-                <form id="sales-form" onsubmit="handleOrderSubmit(event)">
-                    
-                    <div class="form-group">
-                        <label for="name">الاسم واللقب الكامل:</label>
-                        <input type="text" id="name" required placeholder="اكتب اسمك هنا...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">رقم الهاتف:</label>
-                        <input type="tel" id="phone" required placeholder="06XXXXXXXX" pattern="^(05|06|07)[0-9]{8}$">
-                    </div>
-
-                    <div class="form-group">
-                                <div class="form-group">
-            <label for="wilaya">الولاية:</label>
-            <!-- القائمة المنسدلة الحقيقية للـ 58 ولاية كاملة ومعدلة وبلا مشاكل -->
-            <select id="wilaya" required>
-                <option value="" disabled selected>-- اختر ولايتك --</option>
-                <option value="Adrar">01 - أدرار</option>
-                <option value="Chlef">02 - الشلف</option>
-                <option value="Laghouat">03 - الأغواط</option>
-                <option value="Oum El Bouaghi">04 - أم البواقي</option>
-                <option value="Batna">05 - باتنة</option>
-                <option value="Béjaïa">06 - بجاية</option>
-                <option value="Biskra">07 - بسكرة</option>
-                <option value="Béchar">08 - بشار</option>
-                <option value="Blida">09 - البليدة</option>
-                <option value="Bouira">10 - البويرة</option>
-                <option value="Tamanrasset">11 - تمنراست</option>
-                <option value="Tébessa">12 - تبسة</option>
-                <option value="Tlemcen">13 - تلمسان</option>
-                <option value="Tiaret">14 - تيارت</option>
-                <option value="Tizi Ouzou">15 - تيزي وزو</option>
-                <option value="Alger">16 - الجزائر العاصمة</option>
-                <option value="Djelfa">17 - الجلفة</option>
-                <option value="Jijel">18 - جيجل</option>
-                <option value="Sétif">19 - سطيف</option>
-                <option value="Saïda">20 - سعيدة</option>
-                <option value="Skikda">21 - سكيكدة</option>
-                <option value="Sidi Bel Abbès">22 - سيدي بلعباس</option>
-                <option value="Annaba">23 - عنابة</option>
-                <option value="Guelma">24 - قالمة</option>
-                <option value="Constantine">25 - قسنطينة</option>
-                <option value="Médéa">26 - المدية</option>
-                <option value="Mostaganem">27 - مستغانم</option>
-                <option value="M'Sila">28 - المسيلة</option>
-                <option value="Mascara">29 - معسكر</option>
-                <option value="Ouargla">30 - ورقلة</option>
-                <option value="Oran">31 - وهران</option>
-                <option value="El Bayadh">32 - البيض</option>
-                <option value="Illizi">33 - إليزي</option>
-                <option value="Bordj Bou Arréridj">34 - برج بوعريريج</option>
-                <option value="Boumerdès">35 - بومرداس</option>
-                <option value="El Tarf">36 - الطارف</option>
-                <option value="Tindouf">37 - تندوف</option>
-                <option value="Tissemsilt">38 - تيسمسيلت</option>
-                <option value="El Oued">39 - الوادي</option>
-                <option value="Khenchela">40 - خنشلة</option>
-                <option value="Souk Ahras">41 - سوق أهراس</option>
-                <option value="Tipaza">42 - تيبازة</option>
-                <option value="Mila">43 - ميلة</option>
-                <option value="Aïn Defla">44 - عين الدفلى</option>
-                <option value="Naâma">45 - النعامة</option>
-                <option value="Aïn Témouchent">46 - عين تموشنت</option>
-                <option value="Ghardaïa">47 - غرداية</option>
-                <option value="Relizane">48 - غليزان</option>
-                <option value="Timimoun">49 - تيميمون</option>
-                <option value="Bordj Badji Mokhtar">50 - برج باجي مختار</option>
-                <option value="Ouled Djellal">51 - أولاد جلال</option>
-                <option value="Béni Abbès">52 - بني عباس</option>
-                <option value="In Salah">53 - عين صالح</option>
-                <option value="In Guezzam">54 - عين قزام</option>
-                <option value="Touggourt">55 - تقرت</option>
-                <option value="Djanet">56 - جانت</option>
-                <option value="El M'Ghair">57 - المغير</option>
-                <option value="El Meniaa">58 - المنيعة</option>
-            </select>
-        </div>
-
-                    </div>
-
-                    <div class="form-group">
-                        <label for="baladia">البلدية وعنوان السكن بالتفصيل:</label>
-                        <input type="text" id="baladia" required placeholder="اسم البلدية أو الحي...">
-                    </div>
-
-                            <div class="form-group" style="text-align: center;">
-            <label>عدد الكتب المطلوبة:</label>
-            <div class="quantity-control">
-                <!-- الأزرار مستهدفة بدقة الآن برمجياً -->
-                <div class="quantity-btn" onclick="changeQuantity(-1)">-</div>
-                <div class="quantity-value" id="quantity-display">1</div>
-                <div class="quantity-btn" onclick="changeQuantity(1)">+</div>
-            </div>
-        </div>
-
-
-                    <button type="submit" class="btn-submit">🚀 اضغط هنا لتأكيد الطلب الآن</button>
-                </form>
-            </section>
-        </div>
-
-        <div id="success-message">
-            <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
-            <h1 class="success-title-ar">شكراً على طلبكم! سيتم الاتصال بكم قريباً لتأكيد طلبكم وشحنه.</h1>
-            <a href="https://dz-fast-shop.github.io/DZ-Stor/" class="btn-back">⬅️ العودة إلى المتجر الرئيسي</a>
-        </div>
-
-    </div>
-
-    <script>
-        // سكربت السلايدر لتغيير الصور تلقائياً بلمسة خفيفة وسريعة كل 3 ثواني
-        let slideIndex = 0;
-        showSlides();
-
-        function showSlides() {
-            let slides = document.getElementsByClassName("slide");
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";  
-            }
-            slideIndex++;
-            if (slideIndex > slides.length) {slideIndex = 1}    
-            slides[slideIndex-1].style.display = "block";  
-            setTimeout(showSlides, 3000); // تتغير الصورة تلقائياً كل 3 ثواني
-        }
-
-        let currentQuantity = 1;
-        function changeQuantity(amount) {
-            currentQuantity += amount;
-            if (currentQuantity < 1) currentQuantity = 1;
-            document.getElementById('quantity-display').innerText = currentQuantity;
-        }
-
-        function handleOrderSubmit(event) {
-            event.preventDefault();
+            // إخفاء نموذج المتجر وإظهار صفحة الشكر فوراً وبدون أي تأخير بصري
+            document.getElementById('store-content').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            window.scrollTo(0, 0);
 
             const data = {
                 name: document.getElementById('name').value,
@@ -1025,22 +534,18 @@
                 product: "Girl Moments Coloring Book"
             };
 
-            // ضع رابط الـ Webhook الخاص بك والمستخرج من جوجل شيت هنا لتعمل الطلبيات حية
-            const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec
-';
+            // رابط الـ Webhook مصلح في سطر واحد تماماً
+            const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec';
 
-            document.getElementById('store-content').style.display = 'none';
-            document.getElementById('success-message').style.display = 'block';
-            window.scrollTo(0, 0);
-
+            // إرسال البيانات لقوقل شيت في الخلفية
             fetch(webhookUrl, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             })
-            .then(() => console.log("Order submitted!"))
-            .catch(err => console.error("Error:", err));
+            .then(() => console.log("Order successfully sent to Sheets!"))
+            .catch(err => console.error("Network error:", err));
         }
     </script>
 </body>
