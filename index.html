@@ -14,7 +14,7 @@
             --dark-pink: #ff85a2;
             --pastel-green: #e2f0cb;
             --dark-green: #7fa99b;
-            --bg-cozy: #fffaf0; /* لون كريمي هادئ ومزين */
+            --bg-cozy: #fffaf0;
             --text-color: #4a3f35;
         }
 
@@ -59,7 +59,6 @@
             margin-bottom: 25px;
         }
 
-        /* اسم المنتج في الأعلى تماماً وبخط كبير */
         .product-brand-title {
             font-size: 2.2rem;
             font-weight: 900;
@@ -76,20 +75,43 @@
             margin-bottom: 15px;
         }
 
-        .video-container {
+        /* تنسيق الإطار الوردي الجديد للصور المتحركة بدلاً من المربع الأسود */
+        .slider-container {
             position: relative;
             width: 100%;
+            height: 350px;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 8px 25px rgba(255, 133, 162, 0.2);
-            border: 4px solid var(--primary-pink);
-            background-color: #000;
+            border: 5px solid var(--dark-pink);
+            background-color: #fff;
             margin-bottom: 25px;
         }
 
-        .video-container video {
+        .slide {
+            display: none;
             width: 100%;
-            display: block;
+            height: 100%;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: #fff;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 133, 162, 0.9);
+            color: white;
+            padding: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
         }
 
         .price-tag {
@@ -110,53 +132,21 @@
 
         .new-price {
             color: #d9381e;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 900;
         }
 
         .save-badge {
             background-color: var(--dark-pink);
             color: white;
-            padding: 3px 10px;
+            padding: 5px 15px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             display: inline-block;
             margin-top: 5px;
-            animation: pulse 1.5s infinite;
-        }
-
-        .features {
-            margin-bottom: 35px;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            border-right: 5px solid var(--dark-pink);
-        }
-
-        .feature-icon {
-            font-size: 1.8rem;
-            margin-left: 15px;
-        }
-
-        .feature-text h3 {
-            font-size: 1.05rem;
             font-weight: 700;
-            color: #333;
         }
 
-        .feature-text p {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        /* استمارة الطلب */
         .order-card {
             background: white;
             border-radius: 25px;
@@ -201,7 +191,6 @@
             box-shadow: 0 0 8px rgba(255, 133, 162, 0.2);
         }
 
-        /* العداد المطور للكتب بالزائد والناقص */
         .quantity-control {
             display: flex;
             align-items: center;
@@ -231,10 +220,6 @@
             user-select: none;
         }
 
-        .quantity-btn:active {
-            transform: scale(0.92);
-        }
-
         .quantity-value {
             font-size: 1.5rem;
             font-weight: 900;
@@ -255,10 +240,8 @@
             cursor: pointer;
             box-shadow: 0 6px 20px rgba(255, 133, 162, 0.4);
             margin-top: 10px;
-            animation: shakeButton 3s infinite;
         }
 
-        /* صفحة النجاح المشعة والكبيرة */
         #success-message {
             display: none;
             text-align: center;
@@ -267,7 +250,6 @@
             padding: 40px 20px;
             box-shadow: 0 15px 40px rgba(255, 133, 162, 0.3);
             border: 4px solid #4caf50;
-            animation: glow 2s ease-in-out infinite alternate;
         }
 
         .success-title-ar {
@@ -275,16 +257,6 @@
             font-weight: 900;
             color: #4caf50;
             margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .success-title-en {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #2196f3;
-            margin-bottom: 25px;
-            line-height: 1.4;
-            font-family: sans-serif;
         }
 
         .btn-back {
@@ -296,32 +268,6 @@
             font-weight: 700;
             border-radius: 12px;
             margin-top: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: all 0.3s;
-        }
-
-        .btn-back:hover {
-            background: #2c251f;
-        }
-
-        /* المؤثرات الصوتية والتحريكات */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes shakeButton {
-            0%, 85%, 100% { transform: translateX(0); }
-            90% { transform: translateX(-5px); }
-            93% { transform: translateX(5px); }
-            96% { transform: translateX(-3px); }
-            98% { transform: translateX(3px); }
-        }
-
-        @keyframes glow {
-            from { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5), 0 0 20px rgba(76, 175, 80, 0.3); }
-            to { box-shadow: 0 0 25px rgba(76, 175, 80, 0.9), 0 0 40px rgba(76, 175, 80, 0.6); }
         }
     </style>
 </head>
@@ -333,74 +279,57 @@
 
     <div class="container">
         
-        <!-- المحتوى الرئيسي للمتجر -->
         <div id="store-content">
             <header class="hero">
-                <!-- اسم المنتج المطلوب بدقة في الأعلى -->
-                <div class="product-brand-title">Girl Moments Coloring Book</div>
+                <div class="product-brand-title">Coloring Book</div>
                 <div class="product-sub">✨ النسخة الفاخرة بالنابض المميز ✨</div>
                 
-                <div class="video-container">
-                    <video autoplay loop muted playsinline>
-                        <source src="video.mp4" type="video/mp4">
-                    </video>
+                <!-- الإطار المصلح الذي يعرض الصور المتحركة تلقائياً -->
+                <div class="slider-container">
+                    <div class="slide">
+                        <img src="1000025762.jpg" alt="صورة الكتاب">
+                        <div class="slide-caption">📖 غلاف ومظهر الكتاب الفاخر بالنابض</div>
+                    </div>
+                    <div class="slide">
+                        <img src="1000019810.png" alt="قبل التلوين">
+                        <div class="slide-caption">✏️ الصفحة قبل التلوين - تفاصيل دقيقة وجاهزة</div>
+                    </div>
+                    <div class="slide">
+                        <!-- هنا يمكنك مستقبلاً وضع صورة الصفحة بعد تلوينها -->
+                        <img src="1000019804.png" alt="بعد التلوين">
+                        <div class="slide-caption">🎨 إبداع لا ينتهي بعد التلوين بألوان زاهية</div>
+                    </div>
                 </div>
             </header>
 
+            <!-- ضبط السعر الدقيق المتوافق مع الصورة -->
             <div class="price-tag">
                 <span class="old-price">750 دج</span>
-                <span class="new-price">400 دج</span> <br>
-                <span class="save-badge">🔥 سعر المصنع مباشرة (وفر 350 دج)</span>
+                <span class="new-price">450 دج</span> <br>
+                <span class="save-badge">🔥 سعر المصنع مباشرة (وفر 300 دج)</span>
             </div>
 
-            <!-- استمارة الطلب المطورة -->
             <section class="order-card">
                 <h2>🛍️ املأ معلوماتك بدقة لإتمام الطلب:</h2>
                 <form id="sales-form" onsubmit="handleOrderSubmit(event)">
                     
                     <div class="form-group">
                         <label for="name">الاسم واللقب الكامل:</label>
-                        <input type="text" id="name" required placeholder="اكتب اسمك الثلاثي...">
+                        <input type="text" id="name" required placeholder="اكتب اسمك هنا...">
                     </div>
 
                     <div class="form-group">
-                        <label for="phone">رقم الهاتف (يجب أن يبدأ بـ 05، 06، أو 07):</label>
-                        <input type="tel" id="phone" required placeholder="مثال: 06XXXXXXXX" pattern="^(05|06|07)[0-9]{8}$" title="يجب أن يبدأ الرقم بـ 05 أو 06 أو 07 ويتكون من 10 أرقام">
+                        <label for="phone">رقم الهاتف:</label>
+                        <input type="tel" id="phone" required placeholder="06XXXXXXXX" pattern="^(05|06|07)[0-9]{8}$">
                     </div>
 
                     <div class="form-group">
                         <label for="wilaya">الولاية:</label>
                         <select id="wilaya" required>
                             <option value="">-- اختر ولايتك --</option>
-                            <option value="Adrar">01 - أدرار</option> <option value="Chlef">02 - الشلف</option>
-                            <option value="Laghouat">03 - الأغواط</option> <option value="Oum El Bouaghi">04 - أم البواقي</option>
-                            <option value="Batna" selected>05 - باتنة</option> <option value="Béjaïa">06 - بجاية</option>
-                            <option value="Biskra">07 - بسكرة</option> <option value="Béchar">08 - بشار</option>
-                            <option value="Blida">09 - البليدة</option> <option value="Bouira">10 - البويرة</option>
-                            <option value="Tamanrasset">11 - تمنراست</option> <option value="Tébessa">12 - تبسة</option>
-                            <option value="Tlemcen">13 - تلمسان</option> <option value="Tiaret">14 - تيارت</option>
-                            <option value="Tizi Ouzou">15 - تيزي وزو</option> <option value="Alger">16 - الجزائر</option>
-                            <option value="Djelfa">17 - الجلفة</option> <option value="Jijel">18 - جيجل</option>
-                            <option value="Sétif">19 - سطيف</option> <option value="Saïda">20 - سعيدة</option>
-                            <option value="Skikda">21 - سكيكدة</option> <option value="Sidi Bel Abbès">22 - سيدي بلعباس</option>
-                            <option value="Anaba">23 - عنابة</option> <option value="Guelma">24 - قالمة</option>
-                            <option value="Constantine">25 - قسنطينة</option> <option value="Médéa">26 - المدية</option>
-                            <option value="Mostaganem">27 - مستغانم</option> <option value="M'Sila">28 - المسيلة</option>
-                            <option value="Mascara">29 - معسكر</option> <option value="Ouargla">30 - ورقلة</option>
-                            <option value="Oran">31 - وهران</option> <option value="El Bayadh">32 - البيض</option>
-                            <option value="Illizi">33 - إليزي</option> <option value="Bordj Bou Arréridj">34 - برج بوعريريج</option>
-                            <option value="Boumerdès">35 - بومرداس</option> <option value="El Tarf">36 - الطارف</option>
-                            <option value="Tindouf">37 - تندوف</option> <option value="Tissemsilt">38 - تسمسيلت</option>
-                            <option value="El Oued">39 - الوادي</option> <option value="Khenchela">40 - خنشلة</option>
-                            <option value="Souk Ahras">41 - سوق أهراس</option> <option value="Tipaza">42 - تيبازة</option>
-                            <option value="Mila">43 - ميلة</option> <option value="Aïn Defla">44 - عين الدفلى</option>
-                            <option value="Naâma">45 - النعامة</option> <option value="Aïn Témouchent">46 - عين تموشنت</option>
-                            <option value="Ghardaïa">47 - غرداية</option> <option value="Relizane">48 - غليزان</option>
-                            <option value="Timimoun">49 - تيميمون</option> <option value="Bordj Badji Mokhtar">50 - برج باجي مختار</option>
-                            <option value="Ouled Djellal">51 - أولاد جلال</option> <option value="Béni Abbès">52 - بني عباس</option>
-                            <option value="In Salah">53 - عين صالح</option> <option value="In Guezzam">54 - عين قزام</option>
-                            <option value="Touggourt">55 - تقرت</option> <option value="Djanet">56 - جانت</option>
-                            <option value="El M'Ghair">57 - المغير</option> <option value="El Meniaa">58 - المنيعة</option>
+                            <option value="Batna" selected>05 - باتنة</option>
+                            <option value="Alger">16 - الجزائر</option>
+                            <!-- يمكنك إضافة بقية الولايات هنا بمرونة -->
                         </select>
                     </div>
 
@@ -409,9 +338,8 @@
                         <input type="text" id="baladia" required placeholder="اسم البلدية أو الحي...">
                     </div>
 
-                    <!-- عداد اختيار عدد الكتب بالزائد والناقص -->
                     <div class="form-group" style="text-align: center;">
-                        <label style="margin-bottom: 2px;">عدد الكتب المطلوبة:</label>
+                        <label>عدد الكتب المطلوبة:</label>
                         <div class="quantity-control">
                             <div class="quantity-btn" onclick="changeQuantity(-1)">-</div>
                             <div class="quantity-value" id="quantity-display">1</div>
@@ -419,103 +347,69 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-submit">🚀 اضغط هنا لإرسال الطلب الآن</button>
+                    <button type="submit" class="btn-submit">🚀 اضغط هنا لتأكيد الطلب الآن</button>
                 </form>
             </section>
         </div>
 
-        <!-- صفحة النجاح الكبيرة والمشعة مع الصوت والزر للعودة -->
         <div id="success-message">
             <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
-            <h1 class="success-title-ar">شكراً على طلبكم! سيتم الاتصال بكم من طرف فريق DZ-Stor لتأكيد الطلب وإرساله.</h1>
-            <h2 class="success-title-en">Thank you for your order! You will be contacted by the DZ-Stor team soon to confirm and ship your order.</h2>
-            
-            <!-- زر العودة للمتجر الأول -->
-            <!-- غيّر رابط href برابط متجرك الأول الفعلي ليفتح بسلاسة -->
-            <a href="https://dz-fast-shop.github.io/girl-moments/" class="btn-back">⬅️ العودة إلى المتجر الرئيسي</a>
+            <h1 class="success-title-ar">شكراً على طلبكم! سيتم الاتصال بكم قريباً لتأكيد طلبكم وشحنه.</h1>
+            <a href="https://dz-fast-shop.github.io/DZ-Stor/" class="btn-back">⬅️ العودة إلى المتجر الرئيسي</a>
         </div>
 
     </div>
 
     <script>
-        let currentQuantity = 1;
+        // سكربت السلايدر لتغيير الصور تلقائياً بلمسة خفيفة وسريعة كل 3 ثواني
+        let slideIndex = 0;
+        showSlides();
 
-        // دالة التحكم في العداد بين 1 و 10
+        function showSlides() {
+            let slides = document.getElementsByClassName("slide");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            slides[slideIndex-1].style.display = "block";  
+            setTimeout(showSlides, 3000); // تتغير الصورة تلقائياً كل 3 ثواني
+        }
+
+        let currentQuantity = 1;
         function changeQuantity(amount) {
             currentQuantity += amount;
             if (currentQuantity < 1) currentQuantity = 1;
-            if (currentQuantity > 10) currentQuantity = 10;
             document.getElementById('quantity-display').innerText = currentQuantity;
         }
 
-        // دالة معالجة إتمام الطلب وعرض رسالة النجاح الكبيرة
         function handleOrderSubmit(event) {
             event.preventDefault();
 
-            // إخفاء محتوى المتجر القديم
+            const data = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                wilaya: document.getElementById('wilaya').value,
+                baladia: document.getElementById('baladia').value,
+                quantity: currentQuantity,
+                product: "Girl Moments Coloring Book"
+            };
+
+            // ضع رابط الـ Webhook الخاص بك والمستخرج من جوجل شيت هنا لتعمل الطلبيات حية
+            const webhookUrl = 'ضع_رابط_جوجل_شيت_الخاص_بالمتجر_الجديد_هنا';
+
             document.getElementById('store-content').style.display = 'none';
-            // إظهار صفحة النجاح المشعة
             document.getElementById('success-message').style.display = 'block';
             window.scrollTo(0, 0);
 
-            // تشغيل نغمة تنبيه إلكترونية مبهجة تلقائياً باستخدام الصوت البرمجي
-            try {
-                let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                
-                // النغمة الأولى (قصيرة)
-                let osc1 = audioCtx.createOscillator();
-                let gain1 = audioCtx.createGain();
-                osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(523.25, audioCtx.currentTime); // نغمة C5
-                osc1.connect(gain1);
-                gain1.connect(audioCtx.destination);
-                osc1.start();
-                gain1.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-                osc1.stop(audioCtx.currentTime + 0.15);
-
-                // النغمة الثانية (أعلى ومبهجة تليها مباشرة)
-                setTimeout(() => {
-                    let osc2 = audioCtx.createOscillator();
-                    let gain2 = audioCtx.createGain();
-                    osc2.type = 'sine';
-                    osc2.frequency.setValueAtTime(659.25, audioCtx.currentTime); // نغمة E5
-                    osc2.connect(gain2);
-                    gain2.connect(audioCtx.destination);
-                    osc2.start();
-                    gain2.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    osc2.stop(audioCtx.currentTime + 0.3);
-                }, 150);
-            } catch (e) {
-                console.log("Audio alert blocked by browser settings.");
-            }
-
- // هنا نقوم بإرسال البيانات الحقيقية إلى جدول قوقل شيت الجديد
-        const data = {
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            wilaya: document.getElementById('wilaya').value,
-            baladia: document.getElementById('baladia').value,
-            quantity: currentQuantity,
-            product: "Girl Moments Coloring Book"
-        };
-
-        // حط الرابط الطويل (URL) اللي نسخته من Nouveau déploiement بين علامتي الاقتباس هنا
-        const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec';
-
-        fetch(webhookUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(() => {
-            console.log("Order sent successfully!");
-        })
-        .catch(err => {
-            console.error("Error sending order:", err);
-        });
-    }
-</script>
+            fetch(webhookUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(() => console.log("Order submitted!"))
+            .catch(err => console.error("Error:", err));
         }
     </script>
 </body>
