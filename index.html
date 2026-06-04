@@ -263,6 +263,30 @@
             color: #333;
         }
 
+        /* ستايل فاتورة الحساب الحية */
+        .live-invoice {
+            background-color: #fcfcfc;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 1rem;
+        }
+
+        .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .invoice-row.total-row {
+            border-top: 2px dashed var(--dark-pink);
+            padding-top: 10px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #d9381e;
+        }
+
         .btn-submit {
             width: 100%;
             background: linear-gradient(135deg, var(--dark-pink), #ff5c8a);
@@ -303,6 +327,7 @@
             font-weight: 700;
             border-radius: 12px;
             margin-top: 15px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -383,7 +408,7 @@
 
                     <div class="form-group">
                         <label for="wilaya">الولاية:</label>
-                        <select id="wilaya" required>
+                        <select id="wilaya" required onchange="calculateTotal()">
                             <option value="" disabled selected>-- اختر ولايتك --</option>
                             <option value="Adrar">01 - أدرار</option>
                             <option value="Chlef">02 - الشلف</option>
@@ -451,13 +476,12 @@
                         <input type="text" id="baladia" required placeholder="اسم البلدية أو الحي...">
                     </div>
 
-                    <!-- مكان التوصيل الجديد -->
                     <div class="form-group">
                         <label for="delivery_place">مكان التوصيل:</label>
-                        <select id="delivery_place" required>
+                        <select id="delivery_place" required onchange="calculateTotal()">
                             <option value="" disabled selected>-- اختر مكان التوصيل --</option>
-                            <option value="المنزل">🏠 التوصيل للمنزل</option>
-                            <option value="المكتب / مقر العمل">🏢 التوصيل للمكتب / مقر العمل</option>
+                            <option value="المنزل">🏠 التوصيل للمنزل (Domicile)</option>
+                            <option value="المكتب">🏢 استلام من مكتب شركة الشحن (Stop-Desk)</option>
                         </select>
                     </div>
 
@@ -470,6 +494,22 @@
                         </div>
                     </div>
 
+                    <!-- الفاتورة الحية التلقائية -->
+                    <div class="live-invoice">
+                        <div class="invoice-row">
+                            <span>ثمن المنتج:</span>
+                            <span id="invoice-product-price">450 دج</span>
+                        </div>
+                        <div class="invoice-row">
+                            <span>سعر توصيل الولاية:</span>
+                            <span id="invoice-shipping-price">0 دج</span>
+                        </div>
+                        <div class="invoice-row total-row">
+                            <span>المبلغ الإجمالي الكلي:</span>
+                            <span id="invoice-total-price">450 دج</span>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn-submit">🚀 اضغط هنا لتأكيد الطلب الآن</button>
                 </form>
             </section>
@@ -478,14 +518,81 @@
         <div id="success-message">
             <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
             <h1 class="success-title-ar">شكراً على طلبكم! سيتم الاتصال بكم قريباً لتأكيد طلبكم وشحنه.</h1>
-            <!-- رابط العودة المصلح ليقعد في نفس المتجر الحالي الخاص بكتاب التلوين -->
-            <a href="https://dz-fast-shop.github.io/DZ-Stor/girl-moments/" class="btn-back">⬅️ العودة إلى المتجر</a>
+            <!-- زر العودة مصلح يقوم بتحديث الصفحة والبقاء في نفس المتجر الحالي تماماً -->
+            <button class="btn-back" onclick="goToStore()">⬅️ العودة إلى المتجر</button>
         </div>
 
     </div>
 
     <script>
-        // إعداد السلايدر
+        // داتابيز أسعار الشحن من ورقة الأسعار الحقيقية الخاصة بك
+        const shippingRates = {
+            "Annaba": { domicile: 540, desk: 400 },
+            "Alger": { domicile: 650, desk: 500 },
+            "Skikda": { domicile: 650, desk: 500 },
+            "Guelma": { domicile: 650, desk: 500 },
+            "El Tarf": { domicile: 650, desk: 500 },
+            "Chlef": { domicile: 850, desk: 600 },
+            "Oum El Bouaghi": { domicile: 850, desk: 600 },
+            "Batna": { domicile: 850, desk: 600 },
+            "Béjaïa": { domicile: 850, desk: 600 },
+            "Blida": { domicile: 850, desk: 600 },
+            "Bouira": { domicile: 850, desk: 600 },
+            "Tébessa": { domicile: 850, desk: 600 },
+            "Tlemcen": { domicile: 850, desk: 600 },
+            "Tiaret": { domicile: 850, desk: 600 },
+            "Tizi Ouzou": { domicile: 850, desk: 600 },
+            "Jijel": { domicile: 850, desk: 600 },
+            "Sétif": { domicile: 850, desk: 600 },
+            "Saïda": { domicile: 850, desk: 600 },
+            "Sidi Bel Abbès": { domicile: 850, desk: 600 },
+            "Constantine": { domicile: 850, desk: 600 },
+            "Médéa": { domicile: 850, desk: 600 },
+            "Mostaganem": { domicile: 850, desk: 600 },
+            "M'Sila": { domicile: 850, desk: 600 },
+            "Mascara": { domicile: 850, desk: 600 },
+            "Oran": { domicile: 850, desk: 600 },
+            "Bordj Bou Arréridj": { domicile: 850, desk: 600 },
+            "Boumerdès": { domicile: 850, desk: 600 },
+            "Tissemsilt": { domicile: 850, desk: 600 },
+            "Khenchela": { domicile: 850, desk: 600 },
+            "Souk Ahras": { domicile: 850, desk: 600 },
+            "Tipaza": { domicile: 850, desk: 600 },
+            "Mila": { domicile: 850, desk: 600 },
+            "Aïn Defla": { domicile: 850, desk: 600 },
+            "Aïn Témouchent": { domicile: 850, desk: 600 },
+            "Relizane": { domicile: 850, desk: 600 },
+            "Laghouat": { domicile: 900, desk: 700 },
+            "Biskra": { domicile: 900, desk: 700 },
+            "Djelfa": { domicile: 900, desk: 700 },
+            "Ouargla": { domicile: 900, desk: 700 },
+            "El Oued": { domicile: 900, desk: 700 },
+            "Ghardaïa": { domicile: 900, desk: 700 },
+            "Ouled Djellal": { domicile: 900, desk: 700 },
+            "Touggourt": { domicile: 900, desk: 700 },
+            "El M'Ghair": { domicile: 900, desk: 700 },
+            "El Meniaa": { domicile: 900, desk: 700 },
+            "Adrar": { domicile: 1000, desk: 800 },
+            "Béchar": { domicile: 1000, desk: 800 },
+            "El Bayadh": { domicile: 1000, desk: 800 },
+            "Naâma": { domicile: 1000, desk: 800 },
+            "Timimoun": { domicile: 1000, desk: 800 },
+            "Bordj Badji Mokhtar": { domicile: 1000, desk: 800 },
+            "Béni Abbès": { domicile: 1000, desk: 800 },
+            "Tamanrasset": { domicile: 1550, desk: 1350 },
+            "Illizi": { domicile: 1550, desk: 1350 },
+            "Tindouf": { domicile: 1550, desk: 1350 },
+            "In Salah": { domicile: 1550, desk: 1350 },
+            "In Guezzam": { domicile: 1550, desk: 1350 },
+            "Djanet": { domicile: 1550, desk: 1350 }
+        };
+
+        const itemUnitPrice = 450;
+        let currentQuantity = 1;
+        let globalShippingCost = 0;
+        let globalTotalPrice = 450;
+
+        // إعداد السلايدر التلقائي للمتجر
         let slideIndex = 0;
         let slideTimeout;
         
@@ -517,19 +624,52 @@
             slideTimeout = setTimeout(showSlides, 5000);
         }
 
-        // تحكم في الكمية
-        let currentQuantity = 1;
+        // تغيير كمية المنتج مع تحديث السعر تلقائياً
         function changeQuantity(amount) {
             currentQuantity += amount;
             if (currentQuantity < 1) currentQuantity = 1;
             document.getElementById('quantity-display').innerText = currentQuantity;
+            calculateTotal();
         }
 
-        // إرسال الطلب وإظهار رسالة النجاح
+        // دالة السحر: حساب أسعار الشحن والتكلفة الكلية تلقائياً ومباشرة
+        function calculateTotal() {
+            const selectedWilaya = document.getElementById('wilaya').value;
+            const selectedPlace = document.getElementById('delivery_place').value;
+            
+            let shippingCost = 0;
+
+            if (selectedWilaya && shippingRates[selectedWilaya]) {
+                if (selectedPlace === "المكتب") {
+                    shippingCost = shippingRates[selectedWilaya].desk;
+                } else if (selectedPlace === "المنزل") {
+                    shippingCost = shippingRates[selectedWilaya].domicile;
+                }
+            }
+
+            const totalProductPrice = itemUnitPrice * currentQuantity;
+            const finalTotal = totalProductPrice + shippingCost;
+
+            // حفظ المبالغ في المتغيرات العالمية ليتم إرسالها لقوقل شيت
+            globalShippingCost = shippingCost;
+            globalTotalPrice = finalTotal;
+
+            // تحديث واجهة العرض للزبون
+            document.getElementById('invoice-product-price').innerText = totalProductPrice + " دج";
+            document.getElementById('invoice-shipping-price').innerText = shippingCost + " دج";
+            document.getElementById('invoice-total-price').innerText = finalTotal + " دج";
+        }
+
+        // عند الضغط على زر العودة للمتجر
+        function goToStore() {
+            window.location.reload(); // يعيد تشغيل الصفحة الحالية للعودة للمتجر فورا وبدون أخطاء
+        }
+
+        // معالجة وإرسال الطلب
         function handleOrderSubmit(event) {
             event.preventDefault();
 
-            // إخفاء نموذج المتجر وإظهار صفحة الشكر فوراً
+            // إظهار صفحة الشكر وإخفاء المتجر فوراً
             document.getElementById('store-content').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
             window.scrollTo(0, 0);
@@ -539,22 +679,24 @@
                 phone: document.getElementById('phone').value,
                 wilaya: document.getElementById('wilaya').value,
                 baladia: document.getElementById('baladia').value,
-                delivery_place: document.getElementById('delivery_place').value, // إرسال مكان التوصيل الجديد
+                delivery_place: document.getElementById('delivery_place').value,
                 quantity: currentQuantity,
+                shipping_cost: globalShippingCost, // إرسال سعر الشحن المحسوب
+                total_price: globalTotalPrice,      // إرسال السعر الإجمالي الكلي للطلب
                 product: "Girl Moments Coloring Book"
             };
 
             const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec';
 
-            // إرسال البيانات لقوقل شيت في الخلفية
+            // الإرسال لقوقل شيت في الخلفية
             fetch(webhookUrl, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             })
-            .then(() => console.log("Order successfully sent to Sheets!"))
-            .catch(err => console.error("Network error:", err));
+            .then(() => console.log("Order submitted successfully!"))
+            .catch(err => console.error("Error sending order:", err));
         }
     </script>
 </body>
