@@ -489,7 +489,33 @@
                 console.log("Audio alert blocked by browser settings.");
             }
 
-            // هنا يمكنك لاحقاً ربط كود الـ fetch لإرسال البيانات إلى Google Sheets كما فعلت في متجرك الأول.
+ // هنا نقوم بإرسال البيانات الحقيقية إلى جدول قوقل شيت الجديد
+        const data = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            wilaya: document.getElementById('wilaya').value,
+            baladia: document.getElementById('baladia').value,
+            quantity: currentQuantity,
+            product: "Girl Moments Coloring Book"
+        };
+
+        // حط الرابط الطويل (URL) اللي نسخته من Nouveau déploiement بين علامتي الاقتباس هنا
+        const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec';
+
+        fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            console.log("Order sent successfully!");
+        })
+        .catch(err => {
+            console.error("Error sending order:", err);
+        });
+    }
+</script>
         }
     </script>
 </body>
