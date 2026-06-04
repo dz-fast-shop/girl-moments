@@ -17,6 +17,63 @@
             --bg-cozy: #fffaf0;
             --text-color: #4a3f35;
         }
+   /* 1. ضبط الإطار الكبير باش ما يهربش ويحافظ على حجم مثالي في الهاتف والكمبيوتر */
+        .book-container {
+            position: relative;
+            width: 100%;
+            height: 380px; /* طول الإطار */
+            max-height: 70vh; /* يضمن أنه ما يديش كامل الشاشة في الهواتف الطويلة */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(255, 133, 162, 0.2);
+            border: 5px solid var(--dark-pink);
+            background-color: #fff;
+            margin-bottom: 15px;
+            perspective: 1000px;
+        }
+
+        /* 2. هادي هي العفسة السحرية: تجبر الصورة الكبيرة تقعد داخل الإطار مهما كان حجمها الأصلي عريض أو طويل */
+        .main-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* تخلي الصورة تبان كاملة بلا ما تتقطع وبلا ما تخرج على الإطار */
+            background-color: #fff; /* تعمر الفراغات الجانبية بالبيوضة باش تجي الخدمة نقية */
+        }
+
+        /* 3. ضبط معرض الصور المصغر (وحدة قدام أختها) */
+        .thumbnail-gallery {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto; /* يخليك تسحب بيدك يمين ويسار إذا ما كفاكش المكان */
+            padding: 10px 5px;
+            margin-bottom: 25px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px dashed var(--dark-pink);
+            /* إخفاء شريط التمرير المزعج باش يبقى المظهر أنيق */
+            scrollbar-width: none; 
+        }
+        .thumbnail-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 4. إجبار الصور الصغيرة باش تلتزم بمربع صغير (75 بيكسل) وماتبانش عملاقة */
+        .thumb-box {
+            flex: 0 0 75px;
+            width: 75px;
+            height: 75px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* تقص الصورة الصغيرة على شكل مربع كامل باهي ومستف */
+        }
 
         * {
             box-sizing: border-box;
@@ -423,7 +480,8 @@
             };
 
             // ضع رابط الـ Webhook الخاص بك والمستخرج من جوجل شيت هنا لتعمل الطلبيات حية
-            const webhookUrl = 'ضع_رابط_جوجل_شيت_الخاص_بالمتجر_الجديد_هنا';
+            const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec
+';
 
             document.getElementById('store-content').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
