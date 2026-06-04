@@ -285,20 +285,47 @@
                 <div class="product-sub">✨ النسخة الفاخرة بالنابض المميز ✨</div>
                 
                 <!-- الإطار المصلح الذي يعرض الصور المتحركة تلقائياً -->
-                <div class="slider-container">
-                    <div class="slide">
-                        <img src="1000025762.jpg" alt="صورة الكتاب">
+                <div class="book-container" id="mainBookContainer">
+                    <div class="main-slide">
+                        <img src="cover.jpg" alt="غلاف الكتاب">
                         <div class="slide-caption">📖 غلاف ومظهر الكتاب الفاخر بالنابض</div>
                     </div>
-                    <div class="slide">
-                        <img src="1000019810.png" alt="قبل التلوين">
-                        <div class="slide-caption">✏️ الصفحة قبل التلوين - تفاصيل دقيقة وجاهزة</div>
+                    <div class="main-slide">
+                        <img src="page1_blank.png" alt="رسمة 1 غير ملونة">
+                        <div class="slide-caption">✏️ النموذج الأول: رسمة جاهزة وممتعة للتلوين</div>
                     </div>
-                    <div class="slide">
-                        <!-- هنا يمكنك مستقبلاً وضع صورة الصفحة بعد تلوينها -->
-                        <img src="1000019804.png" alt="بعد التلوين">
-                        <div class="slide-caption">🎨 إبداع لا ينتهي بعد التلوين بألوان زاهية</div>
+                    <div class="main-slide">
+                        <img src="page1_colored.png" alt="رسمة 1 ملونة">
+                        <div class="slide-caption">🎨 النتيجة المبهرة بعد التلوين</div>
                     </div>
+                    <div class="main-slide">
+                        <img src="page2_blank.png" alt="رسمة 2 غير ملونة">
+                        <div class="slide-caption">✏️ النموذج الثاني: تفاصيل دقيقة لتنمية الإبداع</div>
+                    </div>
+                    <div class="main-slide">
+                        <img src="page2_colored.png" alt="رسمة 2 ملونة">
+                        <div class="slide-caption">🎨 سحر الألوان وتناسق التصاميم</div>
+                    </div>
+                    <div class="main-slide">
+                        <img src="page3_blank.png" alt="رسمة 3 غير ملونة">
+                        <div class="slide-caption">✏️ النموذج الثالث: رسومات متنوعة لكل الأذواق</div>
+                    </div>
+                    <div class="main-slide">
+                        <img src="page3_colored.png" alt="رسمة 3 ملونة">
+                        <div class="slide-caption">🎨 جودة الورق الفاخر تبرز جمال كل تلوين</div>
+                    </div>
+                </div>
+
+                <div class="thumbnail-gallery">
+                    <div class="thumb-box" onclick="jumpToSlide(0)"><img src="cover.jpg"></div>
+                    <div class="thumb-box" onclick="jumpToSlide(1)"><img src="page1_blank.png"></div>
+                    <div class="thumb-box" onclick="jumpToSlide(2)"><img src="page1_colored.png"></div>
+                    <div class="thumb-box" onclick="jumpToSlide(3)"><img src="page2_blank.png"></div>
+                    <div class="thumb-box" onclick="jumpToSlide(4)"><img src="page2_colored.png"></div>
+                    <div class="thumb-box" onclick="jumpToSlide(5)"><img src="page3_blank.png"></div>
+                    <div class="thumb-box" onclick="jumpToSlide(6)"><img src="page3_colored.png"></div>
+                </div>
+
                 </div>
             </header>
 
