@@ -263,7 +263,6 @@
             color: #333;
         }
 
-        /* ستايل فاتورة الحساب الحية */
         .live-invoice {
             background-color: #fcfcfc;
             border: 2px solid #eee;
@@ -322,12 +321,13 @@
             display: inline-block;
             background: #4a3f35;
             color: white;
-            text-decoration: none;
+            border: none;
             padding: 12px 25px;
             font-weight: 700;
             border-radius: 12px;
             margin-top: 15px;
             cursor: pointer;
+            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -494,7 +494,6 @@
                         </div>
                     </div>
 
-                    <!-- الفاتورة الحية التلقائية -->
                     <div class="live-invoice">
                         <div class="invoice-row">
                             <span>ثمن المنتج:</span>
@@ -518,14 +517,12 @@
         <div id="success-message">
             <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
             <h1 class="success-title-ar">شكراً على طلبكم! سيتم الاتصال بكم قريباً لتأكيد طلبكم وشحنه.</h1>
-            <!-- زر العودة مصلح يقوم بتحديث الصفحة والبقاء في نفس المتجر الحالي تماماً -->
             <button class="btn-back" onclick="goToStore()">⬅️ العودة إلى المتجر</button>
         </div>
 
     </div>
 
     <script>
-        // داتابيز أسعار الشحن من ورقة الأسعار الحقيقية الخاصة بك
         const shippingRates = {
             "Annaba": { domicile: 540, desk: 400 },
             "Alger": { domicile: 650, desk: 500 },
@@ -592,7 +589,6 @@
         let globalShippingCost = 0;
         let globalTotalPrice = 450;
 
-        // إعداد السلايدر التلقائي للمتجر
         let slideIndex = 0;
         let slideTimeout;
         
@@ -624,7 +620,6 @@
             slideTimeout = setTimeout(showSlides, 5000);
         }
 
-        // تغيير كمية المنتج مع تحديث السعر تلقائياً
         function changeQuantity(amount) {
             currentQuantity += amount;
             if (currentQuantity < 1) currentQuantity = 1;
@@ -632,7 +627,6 @@
             calculateTotal();
         }
 
-        // دالة السحر: حساب أسعار الشحن والتكلفة الكلية تلقائياً ومباشرة
         function calculateTotal() {
             const selectedWilaya = document.getElementById('wilaya').value;
             const selectedPlace = document.getElementById('delivery_place').value;
@@ -650,26 +644,29 @@
             const totalProductPrice = itemUnitPrice * currentQuantity;
             const finalTotal = totalProductPrice + shippingCost;
 
-            // حفظ المبالغ في المتغيرات العالمية ليتم إرسالها لقوقل شيت
             globalShippingCost = shippingCost;
             globalTotalPrice = finalTotal;
 
-            // تحديث واجهة العرض للزبون
             document.getElementById('invoice-product-price').innerText = totalProductPrice + " دج";
             document.getElementById('invoice-shipping-price').innerText = shippingCost + " دج";
             document.getElementById('invoice-total-price').innerText = finalTotal + " دج";
         }
 
-        // عند الضغط على زر العودة للمتجر
         function goToStore() {
-            window.location.reload(); // يعيد تشغيل الصفحة الحالية للعودة للمتجر فورا وبدون أخطاء
+            // تصفير الاستمارة والعودة لعرض المتجر بأمان وبدون عمل 404
+            document.getElementById('sales-form').reset();
+            currentQuantity = 1;
+            document.getElementById('quantity-display').innerText = "1";
+            calculateTotal();
+            
+            document.getElementById('success-message').style.display = 'none';
+            document.getElementById('store-content').style.display = 'block';
+            window.scrollTo(0, 0);
         }
 
-        // معالجة وإرسال الطلب
         function handleOrderSubmit(event) {
             event.preventDefault();
 
-            // إظهار صفحة الشكر وإخفاء المتجر فوراً
             document.getElementById('store-content').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
             window.scrollTo(0, 0);
@@ -681,14 +678,13 @@
                 baladia: document.getElementById('baladia').value,
                 delivery_place: document.getElementById('delivery_place').value,
                 quantity: currentQuantity,
-                shipping_cost: globalShippingCost, // إرسال سعر الشحن المحسوب
-                total_price: globalTotalPrice,      // إرسال السعر الإجمالي الكلي للطلب
+                shipping_cost: globalShippingCost,
+                total_price: globalTotalPrice,
                 product: "Girl Moments Coloring Book"
             };
 
             const webhookUrl = 'https://script.google.com/macros/s/AKfycbw_1t6TrxtwFZ0IPXJvI8EeNA0QZwX4qOQofk82PaGlpDDXKwb33jQJC8_evd4BM9u-eg/exec';
 
-            // الإرسال لقوقل شيت في الخلفية
             fetch(webhookUrl, {
                 method: 'POST',
                 mode: 'no-cors',
